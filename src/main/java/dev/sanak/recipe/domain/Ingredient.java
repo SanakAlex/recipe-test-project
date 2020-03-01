@@ -1,6 +1,7 @@
 package dev.sanak.recipe.domain;
 
 import java.math.BigDecimal;
+import java.util.StringJoiner;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,23 @@ public class Ingredient {
 
   @OneToOne
   private UnitOfMeasure unitOfMeasure;
+
+  public Ingredient() {
+  }
+
+  public Ingredient(String description, BigDecimal amount, UnitOfMeasure unitOfMeasure) {
+    this.description = description;
+    this.amount = amount;
+    this.unitOfMeasure = unitOfMeasure;
+  }
+
+  public Ingredient(String description, BigDecimal amount, Recipe recipe,
+      UnitOfMeasure unitOfMeasure) {
+    this.description = description;
+    this.amount = amount;
+    this.recipe = recipe;
+    this.unitOfMeasure = unitOfMeasure;
+  }
 
   public Long getId() {
     return id;
@@ -62,5 +80,14 @@ public class Ingredient {
 
   public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
     this.unitOfMeasure = unitOfMeasure;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Ingredient.class.getSimpleName() + "[", "]")
+        .add("description='" + description + "'")
+        .add("amount=" + amount)
+        .add("unitOfMeasure=" + unitOfMeasure)
+        .toString();
   }
 }

@@ -19,11 +19,23 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    bootstrapVersion = '4.4.1'
+    jQueryVersion = '3.4.1'
+    webjarLocatorVersion = '0.38'
+}
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation(
+            "org.springframework.boot:spring-boot-starter-data-jpa",
+            "org.springframework.boot:spring-boot-starter-thymeleaf",
+            "org.springframework.boot:spring-boot-starter-web",
+            "org.webjars:bootstrap:${bootstrapVersion}",
+            "org.webjars:jquery:${jQueryVersion}",
+            "org.webjars:webjars-locator:${webjarLocatorVersion}",
+    )
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     runtimeOnly 'com.h2database:h2'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

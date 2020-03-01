@@ -3,8 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title>Home Page</title>
+  <link href="webjars/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+
 <h1>My first page</h1>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">description</th>
+    <th scope="col">difficulty</th>
+    <th scope="col">ingredients</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr th:each="recipe : ${recipes}">
+    <th scope="row" th:text="${recipe.id}"></th>
+    <td th:text="${recipe.description}"></td>
+    <td th:text="${recipe.difficulty}"></td>
+    <td th:text="${#strings.listJoin(recipe.ingredients, ',')}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

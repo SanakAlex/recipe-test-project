@@ -29,6 +29,8 @@ public class Recipe {
   private Integer servings;
   private String source;
   private String url;
+
+  @Lob
   private String directions;
 
   @Lob
@@ -153,5 +155,13 @@ public class Recipe {
 
   public void setCategories(Set<Category> categories) {
     this.categories = categories;
+  }
+
+  public Recipe addIngredient(Ingredient ingredient) {
+    if (ingredient != null) {
+      ingredient.setRecipe(this);
+      this.getIngredients().add(ingredient);
+    }
+    return this;
   }
 }
