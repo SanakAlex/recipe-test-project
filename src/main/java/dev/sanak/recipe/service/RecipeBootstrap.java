@@ -8,17 +8,18 @@ import dev.sanak.recipe.domain.UnitOfMeasure;
 import dev.sanak.recipe.repositories.CategoryRepository;
 import dev.sanak.recipe.repositories.RecipeRepository;
 import dev.sanak.recipe.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -34,8 +35,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
   }
 
   @Override
+  @Transactional
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    recipeRepository.saveAll(prepareListOfRecipes());
+    log.info("Preparing recipe Data to be saved");
+    List<Recipe> recipes = prepareListOfRecipes();
+    recipeRepository.saveAll(recipes);
+    log.info(recipes.size() + " recipes were saved");
   }
 
   private List<Recipe> prepareListOfRecipes() {
@@ -60,36 +65,38 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         .orElseThrow(NoSuchElementException::new);
 
     Recipe burgerRecipe = new Recipe();
-    burgerRecipe.setCategories(Collections.singleton(american));
+    burgerRecipe.getCategories().add(american);
     burgerRecipe.setCookTime(2);
     burgerRecipe.setDifficulty(Difficulty.SEMI_HARD);
     burgerRecipe.setDescription("Burger");
     burgerRecipe.setServings(1);
     burgerRecipe.setPreparationTime(20);
     burgerRecipe.setSource("web");
-    burgerRecipe.addIngredient(new Ingredient("Meet", BigDecimal.valueOf(1L), slice));
-    burgerRecipe.addIngredient(new Ingredient("Tomato", BigDecimal.valueOf(5L), ripe));
-    burgerRecipe.addIngredient(new Ingredient("Cheese", BigDecimal.valueOf(1L), ounce));
-    burgerRecipe.addIngredient(new Ingredient("Souse", BigDecimal.valueOf(2L), tablespoon));
+    burgerRecipe
+        .addIngredient(new Ingredient("Meet", BigDecimal.valueOf(1L), slice))
+        .addIngredient(new Ingredient("Tomato", BigDecimal.valueOf(5L), ripe))
+        .addIngredient(new Ingredient("Cheese", BigDecimal.valueOf(1L), ounce))
+        .addIngredient(new Ingredient("Souse", BigDecimal.valueOf(2L), tablespoon));
 
-    Recipe salatRecipe = new Recipe();
-    salatRecipe.setCategories(Collections.singleton(italian));
-    salatRecipe.setCookTime(10);
-    salatRecipe.setDifficulty(Difficulty.EASY);
-    salatRecipe.setDescription("Salat");
-    salatRecipe.setServings(5);
-    salatRecipe.setPreparationTime(40);
-    salatRecipe.setSource("magazine");
-    salatRecipe.addIngredient(new Ingredient("Cucumber", BigDecimal.valueOf(10L), slice));
-    salatRecipe.addIngredient(new Ingredient("Tomato", BigDecimal.valueOf(10L), slice));
-    salatRecipe.addIngredient(new Ingredient("Cheese", BigDecimal.valueOf(1L), ounce));
-    salatRecipe.addIngredient(new Ingredient("Juice", BigDecimal.valueOf(1L), cup));
-    salatRecipe.addIngredient(new Ingredient("Salt", BigDecimal.valueOf(1L), pinch));
-    salatRecipe.addIngredient(new Ingredient("Souse", BigDecimal.valueOf(2L), teaspoon));
+    Recipe saladRecipe = new Recipe();
+    saladRecipe.getCategories().add(italian);
+    saladRecipe.setCookTime(10);
+    saladRecipe.setDifficulty(Difficulty.EASY);
+    saladRecipe.setDescription("Salat");
+    saladRecipe.setServings(5);
+    saladRecipe.setPreparationTime(40);
+    saladRecipe.setSource("magazine");
+    saladRecipe
+        .addIngredient(new Ingredient("Cucumber", BigDecimal.valueOf(10L), slice))
+        .addIngredient(new Ingredient("Tomato", BigDecimal.valueOf(10L), slice))
+        .addIngredient(new Ingredient("Cheese", BigDecimal.valueOf(1L), ounce))
+        .addIngredient(new Ingredient("Juice", BigDecimal.valueOf(1L), cup))
+        .addIngredient(new Ingredient("Salt", BigDecimal.valueOf(1L), pinch))
+        .addIngredient(new Ingredient("Souse", BigDecimal.valueOf(2L), teaspoon));
 
     List<Recipe> recipes = new ArrayList<>();
     recipes.add(burgerRecipe);
-    recipes.add(salatRecipe);
+    recipes.add(saladRecipe);
     return recipes;
   }
 }

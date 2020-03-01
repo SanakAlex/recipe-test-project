@@ -1,7 +1,10 @@
 package dev.sanak.recipe.domain;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.math.BigDecimal;
-import java.util.StringJoiner;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,11 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = {"recipe"})
 @Entity
 public class Ingredient {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @EqualsAndHashCode.Include
   private Long id;
 
   private String description;
@@ -34,60 +41,4 @@ public class Ingredient {
     this.unitOfMeasure = unitOfMeasure;
   }
 
-  public Ingredient(String description, BigDecimal amount, Recipe recipe,
-      UnitOfMeasure unitOfMeasure) {
-    this.description = description;
-    this.amount = amount;
-    this.recipe = recipe;
-    this.unitOfMeasure = unitOfMeasure;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public BigDecimal getAmount() {
-    return amount;
-  }
-
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
-  }
-
-  public Recipe getRecipe() {
-    return recipe;
-  }
-
-  public void setRecipe(Recipe recipe) {
-    this.recipe = recipe;
-  }
-
-  public UnitOfMeasure getUnitOfMeasure() {
-    return unitOfMeasure;
-  }
-
-  public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
-    this.unitOfMeasure = unitOfMeasure;
-  }
-
-  @Override
-  public String toString() {
-    return new StringJoiner(", ", Ingredient.class.getSimpleName() + "[", "]")
-        .add("description='" + description + "'")
-        .add("amount=" + amount)
-        .add("unitOfMeasure=" + unitOfMeasure)
-        .toString();
-  }
 }
